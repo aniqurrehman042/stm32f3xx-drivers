@@ -10,6 +10,26 @@
 
 #include <stdint.h>
 
+// ARM Cortex Mx NVIC ISERx register addresses
+
+#define NVIC_ISER0					((volatile uint32_t*)0xE000E100)
+#define NVIC_ISER1					((volatile uint32_t*)0xE000E104)
+#define NVIC_ISER2					((volatile uint32_t*)0xE000E108)
+#define NVIC_ISER3					((volatile uint32_t*)0xE000E10C)
+
+// ARM Cortex Mx NVIC ICERx register addresses
+
+#define NVIC_ICER0					((volatile uint32_t*)0xE000E180)
+#define NVIC_ICER1					((volatile uint32_t*)0xE000E184)
+#define NVIC_ICER2					((volatile uint32_t*)0xE000E188)
+#define NVIC_ICER3					((volatile uint32_t*)0xE000E18C)
+
+// ARM Cortex Mx Interrupt Priority register addresses
+
+#define NVIC_PR_BASE_ADDR			((volatile uint32_t*)0xE000E400)
+
+#define NO_PR_BITS_IMPLEMENTED		4
+
 // Memories Base Addresses
 
 #define FLASH_BASEADDR				0x08000000U
@@ -87,6 +107,25 @@ typedef struct {
 	volatile uint32_t CFGR3;		// Clock Configuration Register 3
 } RCC_RefDef_t;
 
+typedef struct {
+	volatile uint32_t IMR;
+	volatile uint32_t EMR;
+	volatile uint32_t RTSR;
+	volatile uint32_t FTSR;
+	volatile uint32_t SWIER;
+	volatile uint32_t PR;
+} EXTI_RefDef_t;
+
+typedef struct {
+	volatile uint32_t 	MEMRMP;
+	volatile uint32_t 	PMC;
+	volatile uint32_t 	EXTICR[4];
+	uint32_t 			RESERVED1[2];
+	volatile uint32_t 	CMPCR;
+	uint32_t 			RESERVED2[2];
+	volatile uint32_t 	CFGR;
+} SYSCFG_RefDef_t;
+
 // Peripheral Definitions
 
 #define GPIOA						((GPIO_RegDef_t*)GPIOA_BASEADDR)
@@ -97,6 +136,10 @@ typedef struct {
 #define GPIOF						((GPIO_RegDef_t*)GPIOF_BASEADDR)
 
 #define RCC							((RCC_RefDef_t*)RCC_BASEADDR)
+
+#define EXTI						((EXTI_RefDef_t*)EXTI_BASEADDR)
+
+#define SYSCFG						((SYSCFG_RefDef_t*)SYSCFG_BASEADDR)
 
 // Clock Enable Macros for GPIOx Peripherals
 
@@ -172,6 +215,23 @@ typedef struct {
 #define GPIOD_REG_RESET()			do { (RCC->AHBRSTR |= (1 << 20)); (RCC->AHBRSTR &= ~(1 << 20)); } while(0)
 #define GPIOE_REG_RESET()			do { (RCC->AHBRSTR |= (1 << 21)); (RCC->AHBRSTR &= ~(1 << 21)); } while(0)
 #define GPIOF_REG_RESET()			do { (RCC->AHBRSTR |= (1 << 22)); (RCC->AHBRSTR &= ~(1 << 22)); } while(0)
+
+#define GPIO_BASEADDR_TO_CODE(x)	( (x == GPIOA) ? 0 : \
+									(x == GPIOB) ? 1 : \
+									(x == GPIOC) ? 2 : \
+									(x == GPIOD) ? 3 : \
+									(x == GPIOE) ? 4 : \
+									(x == GPIOF) ? 5 : 0 )
+
+// IRQ Number for EXTI lines
+
+#define IRQ_NO_EXTI0				6
+#define IRQ_NO_EXTI1				7
+#define IRQ_NO_EXTI2				8
+#define IRQ_NO_EXTI3				9
+#define IRQ_NO_EXTI4				10
+#define IRQ_NO_EXTI9_1				23
+#define IRQ_NO_EXTI15_10			40
 
 // Generic Macros
 

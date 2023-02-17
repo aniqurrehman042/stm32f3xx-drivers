@@ -24,7 +24,7 @@ typedef struct {
 // Handle structure for GPIO pin
 
 typedef struct {
-	GPIO_RegDef_t* pGPOIx;				// Base address of the GPIO peripheral to which the pin belongs
+	GPIO_RegDef_t* pGPIOx;				// Base address of the GPIO peripheral to which the pin belongs
 	GPIO_PinConfig_t GPIO_PinConfig;	// GPIO pin configuration settings
 } GPIO_Handle_t;
 
@@ -101,7 +101,8 @@ void GPIO_ToggleOutputPin(GPIO_RegDef_t* pGPIOx, uint8_t PinNumber);
 
 // IRQ configuration and ISR handling
 
-void GPIO_IRQConfig(uint8_t IRQNumber, uint8_t IRQPriority, uint8_t EnorDi);
+void GPIO_IRQConfig(uint8_t IRQNumber, uint8_t EnorDi);
+void GPIO_IRQPriorityConfig(uint8_t IRQNumber, uint32_t IRQPriority);
 void GPIO_IRQHandling(uint8_t PinNumber);
 
 #endif /* INC_STM32F303XX_GPIO_DRIVER_H_ */
